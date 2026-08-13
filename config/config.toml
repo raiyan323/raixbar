@@ -1,0 +1,411 @@
+# ============================================================
+# RAIXBAR CONFIG
+# Waybar-style Hyprland bar
+# ============================================================
+
+
+# ============================================================
+# BAR
+# ============================================================
+
+[bar]
+
+# 0 = full available display width
+width = 1350
+height = 44
+
+position = "top"
+alignment = "center"
+
+margin_top = 0
+margin_bottom = 0
+margin_left = 0
+margin_right = 0
+
+# Hyprland reserves this much space
+exclusive_zone = 44
+
+layer = "top"
+keyboard_mode = "none"
+
+
+# ============================================================
+# GLOBAL STYLE
+# ============================================================
+
+[style]
+
+background = "rgba(17, 17, 27, 0.94)"
+background_hover = "rgba(255, 255, 255, 0.07)"
+
+opacity = 0.95
+
+text_color = "#cdd6f4"
+muted_color = "#6c7086"
+accent_color = "#89b4fa"
+
+border_color = "rgba(255, 255, 255, 0.08)"
+border_width = 0
+border_radius = 0
+
+module_background = "transparent"
+module_hover_background = "rgba(255,255,255,0.065)"
+module_radius = 9
+
+workspace_background = "rgba(255,255,255,0.035)"
+workspace_active_background = "rgba(137,180,250,0.20)"
+workspace_hover_background = "rgba(255,255,255,0.08)"
+workspace_urgent_background = "rgba(243,139,168,0.22)"
+
+workspace_active_color = "#ffffff"
+workspace_inactive_color = "#6c7086"
+workspace_urgent_color = "#f38ba8"
+
+
+# ============================================================
+# FONT
+# ============================================================
+
+[font]
+
+family = "JetBrainsMono Nerd Font"
+
+size = 12
+weight = 650
+
+logo_size = 16
+workspace_size = 12
+
+
+# ============================================================
+# SPACING
+# ============================================================
+
+[spacing]
+
+module = 3
+
+horizontal = 10
+vertical = 3
+
+bar_padding = 5
+
+
+# ============================================================
+# LAYOUT
+# ============================================================
+
+[layout]
+
+# LEFT
+left = [
+    "logo",
+    "workspaces"
+]
+
+# CENTER
+center = [
+    "clock"
+]
+
+# RIGHT
+right = [
+    "cpu",
+    "ram",
+    "network",
+    "volume"
+]
+
+
+# ============================================================
+# LOGO
+# ============================================================
+
+[logo]
+
+enabled = true
+
+icon = ""
+text = "Raix"
+
+icon_color = "#89b4fa"
+text_color = "#cdd6f4"
+
+icon_size = 16
+
+
+# ============================================================
+# WORKSPACES
+# ============================================================
+
+[workspaces]
+
+enabled = true
+
+show_empty = true
+show_special = false
+
+# ONLY 1 - 5
+numbers = [
+    1,
+    2,
+    3,
+    4,
+    5
+]
+
+format = "{id}"
+
+active_color = "#ffffff"
+inactive_color = "#6c7086"
+urgent_color = "#f38ba8"
+
+active_background = "rgba(137,180,250,0.20)"
+inactive_background = "transparent"
+hover_background = "rgba(255,255,255,0.08)"
+urgent_background = "rgba(243,139,168,0.22)"
+
+padding = 9
+radius = 8
+
+scroll_switch = true
+
+left_click = "hyprctl dispatch workspace {id}"
+
+right_click = ""
+
+middle_click = ""
+
+interval = 500
+
+
+# ============================================================
+# CPU
+# ============================================================
+
+[cpu]
+
+enabled = true
+
+format = "{icon}  {value}%"
+icon = "󰍛"
+
+color = "#cba6f7"
+background = "transparent"
+
+font_size = 12
+font_weight = 650
+
+padding = 10
+radius = 9
+
+interval = 1000
+
+tooltip = "CPU Usage"
+
+left_click = "kitty -e btop"
+right_click = ""
+middle_click = ""
+
+scroll_up = ""
+scroll_down = ""
+
+
+# ============================================================
+# RAM
+# ============================================================
+
+[ram]
+
+enabled = true
+
+format = "{icon}  {value}%"
+icon = "󰘚"
+
+color = "#a6e3a1"
+background = "transparent"
+
+font_size = 12
+font_weight = 650
+
+padding = 10
+radius = 9
+
+interval = 1000
+
+tooltip = "Memory Usage"
+
+left_click = "kitty -e btop"
+right_click = ""
+middle_click = ""
+
+scroll_up = ""
+scroll_down = ""
+
+
+# ============================================================
+# NETWORK
+# ============================================================
+
+[network]
+
+enabled = true
+
+format = "{icon}  {value}"
+icon = "󰖩"
+
+color = "#89dceb"
+background = "transparent"
+
+font_size = 12
+font_weight = 650
+
+padding = 10
+radius = 9
+
+interval = 1000
+
+tooltip = "Network"
+
+left_click = "nm-connection-editor"
+right_click = "kitty -e nmtui"
+middle_click = ""
+
+scroll_up = ""
+scroll_down = ""
+
+
+# ============================================================
+# VOLUME
+# ============================================================
+
+[volume]
+
+enabled = true
+
+format = "{icon}  {value}%"
+icon = "󰕾"
+
+color = "#f5c2e7"
+background = "transparent"
+
+font_size = 12
+font_weight = 650
+
+padding = 10
+radius = 9
+
+interval = 500
+
+tooltip = "Audio Volume"
+
+left_click = "pavucontrol"
+
+right_click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+
+middle_click = ""
+
+scroll_up = "wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"
+scroll_down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+
+
+# ============================================================
+# BATTERY
+# ============================================================
+
+[battery]
+
+enabled = false
+
+format = "{icon}  {value}%"
+icon = "󰁹"
+
+color = "#f9e2af"
+background = "transparent"
+
+font_size = 12
+font_weight = 650
+
+padding = 10
+radius = 9
+
+interval = 5000
+
+tooltip = "Battery"
+
+left_click = ""
+right_click = ""
+middle_click = ""
+
+scroll_up = ""
+scroll_down = ""
+
+
+# ============================================================
+# CLOCK
+# ============================================================
+
+[clock]
+
+enabled = true
+
+format = "%a  %d %b  •  %H:%M"
+
+color = "#89b4fa"
+
+font_size = 12
+font_weight = 800
+
+padding = 14
+radius = 9
+
+interval = 1000
+
+left_click = ""
+right_click = ""
+middle_click = ""
+
+scroll_up = ""
+scroll_down = ""
+
+
+# ============================================================
+# CUSTOM CSS
+# ============================================================
+
+[css]
+
+custom = """
+/* =========================================================
+   RAIXBAR CUSTOM
+   ========================================================= */
+
+.raix-bar {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.28);
+}
+
+/* LEFT workspace area */
+
+.workspace-container {
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+/* Modules */
+
+.module:hover {
+    box-shadow: 0 0 12px rgba(137,180,250,0.06);
+}
+
+/* Active workspace */
+
+.workspace.active {
+    font-weight: 800;
+}
+
+/* Urgent workspace */
+
+.workspace.urgent {
+    font-weight: 800;
+}
+"""

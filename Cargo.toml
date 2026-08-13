@@ -1,0 +1,10 @@
+[package]
+name = "raixbar"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gtk4 = "0.10"
+gtk4-layer-shell = "0.7"
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
