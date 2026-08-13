@@ -3,13 +3,13 @@ pkgver=0.1.0
 pkgrel=1
 pkgdesc="Fast and minimal Wayland application launcher"
 arch=('x86_64')
-url="https://github.com/raiyan323/raix"
+url="https://github.com/raiyan323/raixbar"
 license=('MIT')
 
 depends=('wayland')
 makedepends=('cargo' 'git')
 
-source=("git+https://github.com/raiyan323/raix.git")
+source=("git+https://github.com/raiyan323/raixbar.git")
 sha256sums=('SKIP')
 
 prepare() {
