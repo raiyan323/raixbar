@@ -1,4 +1,4 @@
-pkgname=raix
+pkgname=raixbar
 pkgver=0.1.0
 pkgrel=1
 pkgdesc="Fast and minimal Wayland application launcher"
@@ -13,21 +13,21 @@ source=("git+https://github.com/raiyan323/raixbar.git")
 sha256sums=('SKIP')
 
 prepare() {
-    cd "$srcdir/raix"
+    cd "$srcdir/raixbar"
     export CARGO_HOME="$srcdir/cargo"
     cargo fetch
 }
 
 build() {
-    cd "$srcdir/raix"
+    cd "$srcdir/raixbar"
     export CARGO_HOME="$srcdir/cargo"
     cargo build --release
 }
 
 package() {
-    cd "$srcdir/raix"
+    cd "$srcdir/raixbar"
 
     install -Dm755 \
-        "target/release/raix" \
-        "$pkgdir/usr/bin/raix"
+        "target/release/raixbar" \
+        "$pkgdir/usr/bin/raixbar"
 }
