@@ -134,18 +134,29 @@ impl Default for BarConfig {
 
 
 // ============================================================
-// STYLE
+// GLOBAL STYLE
 // ============================================================
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(default)]
 struct StyleConfig {
+    // --------------------------------------------------------
+    // BAR
+    // --------------------------------------------------------
+
     bar_background: String,
     bar_opacity: f32,
 
     bar_border_color: String,
     bar_border_width: i32,
     bar_radius: i32,
+
+
+    // --------------------------------------------------------
+    // GLOBAL MODULE DEFAULTS
+    //
+    // Individual module settings override these.
+    // --------------------------------------------------------
 
     module_background: String,
     module_opacity: f32,
@@ -155,9 +166,23 @@ struct StyleConfig {
     module_border_width: i32,
     module_radius: i32,
 
+    module_padding: i32,
+    module_width: i32,
+    module_height: i32,
+
+
+    // --------------------------------------------------------
+    // COLORS
+    // --------------------------------------------------------
+
     text_color: String,
     muted_color: String,
     accent_color: String,
+
+
+    // --------------------------------------------------------
+    // WORKSPACES
+    // --------------------------------------------------------
 
     workspace_background: String,
     workspace_active_background: String,
@@ -172,6 +197,11 @@ struct StyleConfig {
     workspace_border_width: i32,
     workspace_radius: i32,
 
+
+    // --------------------------------------------------------
+    // CLOCK GLOBAL DEFAULTS
+    // --------------------------------------------------------
+
     clock_background: String,
     clock_opacity: f32,
     clock_hover_background: String,
@@ -184,6 +214,10 @@ struct StyleConfig {
 impl Default for StyleConfig {
     fn default() -> Self {
         Self {
+            // ------------------------------------------------
+            // BAR
+            // ------------------------------------------------
+
             bar_background: "transparent".into(),
             bar_opacity: 1.0,
 
@@ -191,64 +225,112 @@ impl Default for StyleConfig {
             bar_border_width: 0,
             bar_radius: 0,
 
+
+            // ------------------------------------------------
+            // GLOBAL MODULE
+            // ------------------------------------------------
+
             module_background:
                 "rgba(255,255,255,0.055)".into(),
 
-            module_opacity: 1.0,
+            module_opacity:
+                1.0,
 
             module_hover_background:
-                "rgba(255,255,255,0.09)".into(),
+                "rgba(255,255,255,0.10)".into(),
 
             module_border_color:
-                "transparent".into(),
+                "rgba(255,255,255,0.08)".into(),
 
-            module_border_width: 0,
-            module_radius: 9,
+            module_border_width:
+                1,
 
-            text_color: "#cdd6f4".into(),
-            muted_color: "#6c7086".into(),
-            accent_color: "#89b4fa".into(),
+            module_radius:
+                9,
+
+            // 0 = use automatic padding
+            module_padding:
+                10,
+
+            // 0 = automatic width
+            module_width:
+                0,
+
+            // 0 = automatic height
+            module_height:
+                0,
+
+
+            // ------------------------------------------------
+            // COLORS
+            // ------------------------------------------------
+
+            text_color:
+                "#ffffff".into(),
+
+            muted_color:
+                "#a1a1aa".into(),
+
+            accent_color:
+                "#ffffff".into(),
+
+
+            // ------------------------------------------------
+            // WORKSPACES
+            // ------------------------------------------------
 
             workspace_background:
                 "rgba(255,255,255,0.035)".into(),
 
             workspace_active_background:
-                "rgba(137,180,250,0.20)".into(),
+                "rgba(255,255,255,0.16)".into(),
 
             workspace_hover_background:
-                "rgba(255,255,255,0.08)".into(),
+                "rgba(255,255,255,0.10)".into(),
 
             workspace_urgent_background:
-                "rgba(243,139,168,0.22)".into(),
+                "rgba(255,255,255,0.12)".into(),
 
             workspace_active_color:
                 "#ffffff".into(),
 
             workspace_inactive_color:
-                "#6c7086".into(),
+                "#8f8f98".into(),
 
             workspace_urgent_color:
-                "#f38ba8".into(),
+                "#ffffff".into(),
 
             workspace_border_color:
-                "transparent".into(),
+                "rgba(255,255,255,0.08)".into(),
 
-            workspace_border_width: 0,
-            workspace_radius: 8,
+            workspace_border_width:
+                1,
+
+            workspace_radius:
+                8,
+
+
+            // ------------------------------------------------
+            // CLOCK
+            // ------------------------------------------------
 
             clock_background:
-                "rgba(255,255,255,0.055)".into(),
+                "rgba(255,255,255,0.075)".into(),
 
-            clock_opacity: 1.0,
+            clock_opacity:
+                1.0,
 
             clock_hover_background:
-                "rgba(255,255,255,0.09)".into(),
+                "rgba(255,255,255,0.12)".into(),
 
             clock_border_color:
-                "transparent".into(),
+                "rgba(255,255,255,0.10)".into(),
 
-            clock_border_width: 0,
-            clock_radius: 9,
+            clock_border_width:
+                1,
+
+            clock_radius:
+                9,
         }
     }
 }
@@ -276,7 +358,7 @@ impl Default for FontConfig {
                 "JetBrainsMono Nerd Font".into(),
 
             size: 12,
-            weight: 650,
+            weight: 600,
 
             logo_size: 17,
             workspace_size: 12,
@@ -306,6 +388,7 @@ impl Default for SpacingConfig {
     fn default() -> Self {
         Self {
             zone: 0,
+
             module: 4,
 
             horizontal: 10,
@@ -332,12 +415,22 @@ struct LayoutConfig {
 
 impl Default for LayoutConfig {
     fn default() -> Self {
-        // IMPORTANT:
-        // Nothing appears unless user adds it to config.
         Self {
-            left: Vec::new(),
-            center: Vec::new(),
-            right: Vec::new(),
+            left: vec![
+                "workspaces".into(),
+            ],
+
+            center: vec![
+                "clock".into(),
+            ],
+
+            right: vec![
+                "cpu".into(),
+                "ram".into(),
+                "network".into(),
+                "volume".into(),
+                "battery".into(),
+            ],
         }
     }
 }
@@ -352,11 +445,9 @@ impl Default for LayoutConfig {
 struct LogoConfig {
     enabled: bool,
 
-    // Controls ONLY the icon.
     icon_enabled: bool,
 
     icon: String,
-
     icon_color: String,
 
     background: String,
@@ -364,6 +455,13 @@ struct LogoConfig {
 
     padding: i32,
     radius: i32,
+
+    width: i32,
+    height: i32,
+
+    left_click: String,
+    right_click: String,
+    middle_click: String,
 }
 
 impl Default for LogoConfig {
@@ -374,23 +472,26 @@ impl Default for LogoConfig {
             icon_enabled: true,
 
             icon: "".into(),
+            icon_color: "#ffffff".into(),
 
-            icon_color:
-                "#89b4fa".into(),
-
-            background:
-                "transparent".into(),
-
+            background: "transparent".into(),
             hover_background:
-                "rgba(255,255,255,0.08)"
-                    .into(),
+                "rgba(255,255,255,0.10)".into(),
 
             padding: 9,
             radius: 9,
+
+            width: 0,
+            height: 0,
+
+            left_click:
+                "wofi --show drun".into(),
+
+            right_click: String::new(),
+            middle_click: String::new(),
         }
     }
 }
-
 
 // ============================================================
 // LOGO TEXT
@@ -410,29 +511,33 @@ struct LogoTextConfig {
 
     padding: i32,
     radius: i32,
+
+    width: i32,
+    height: i32,
 }
 
 impl Default for LogoTextConfig {
     fn default() -> Self {
         Self {
-            // IMPORTANT:
-            // false means NO text widget is created.
             enabled: false,
 
-            text: "Raix".into(),
+            text:
+                "Raix".into(),
 
             color:
-                "#cdd6f4".into(),
+                "#ffffff".into(),
 
             background:
                 "transparent".into(),
 
             hover_background:
-                "rgba(255,255,255,0.08)"
-                    .into(),
+                "rgba(255,255,255,0.08)".into(),
 
             padding: 9,
             radius: 9,
+
+            width: 0,
+            height: 0,
         }
     }
 }
@@ -456,6 +561,9 @@ struct WorkspaceConfig {
     padding: i32,
     gap: i32,
 
+    width: i32,
+    height: i32,
+
     scroll_switch: bool,
 
     left_click: String,
@@ -473,23 +581,39 @@ impl Default for WorkspaceConfig {
             numbers:
                 vec![1, 2, 3, 4, 5],
 
-            show_empty: true,
+            show_empty:
+                true,
 
-            format: "{id}".into(),
+            format:
+                "{id}".into(),
 
-            padding: 9,
-            gap: 2,
+            padding:
+                9,
 
-            scroll_switch: true,
+            gap:
+                2,
+
+            width:
+                0,
+
+            height:
+                32,
+
+            scroll_switch:
+                true,
 
             left_click:
                 "hyprctl dispatch workspace {id}"
                     .into(),
 
-            right_click: String::new(),
-            middle_click: String::new(),
+            right_click:
+                String::new(),
 
-            interval: 500,
+            middle_click:
+                String::new(),
+
+            interval:
+                500,
         }
     }
 }
@@ -497,6 +621,19 @@ impl Default for WorkspaceConfig {
 
 // ============================================================
 // MODULE
+//
+// Empty / 0 values mean:
+// USE GLOBAL STYLE
+//
+// Example:
+//
+// background = ""
+// padding = 0
+// width = 0
+//
+// => style.module_background
+// => style.module_padding
+// => automatic width
 // ============================================================
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -518,6 +655,10 @@ struct ModuleConfig {
     border_width: i32,
 
     padding: i32,
+
+    width: i32,
+    height: i32,
+
     radius: i32,
 
     interval: u64,
@@ -540,39 +681,67 @@ impl Default for ModuleConfig {
             format:
                 "{icon}  {value}".into(),
 
-            icon: String::new(),
+            icon:
+                String::new(),
 
             color:
-                "#cdd6f4".into(),
+                String::new(),
 
+            // Empty = GLOBAL
             background:
-                "rgba(255,255,255,0.055)"
-                    .into(),
+                String::new(),
 
             hover_background:
-                "rgba(255,255,255,0.09)"
-                    .into(),
+                String::new(),
 
-            opacity: 1.0,
+            // 0.0 = GLOBAL
+            opacity:
+                0.0,
 
+            // Empty = GLOBAL
             border_color:
-                "transparent".into(),
+                String::new(),
 
-            border_width: 0,
+            // -1 = GLOBAL
+            border_width:
+                -1,
 
-            padding: 10,
-            radius: 9,
+            // 0 = GLOBAL
+            padding:
+                0,
 
-            interval: 1000,
+            // 0 = auto
+            width:
+                0,
 
-            tooltip: String::new(),
+            // 0 = auto
+            height:
+                0,
 
-            left_click: String::new(),
-            right_click: String::new(),
-            middle_click: String::new(),
+            // -1 = GLOBAL
+            radius:
+                -1,
 
-            scroll_up: String::new(),
-            scroll_down: String::new(),
+            interval:
+                1000,
+
+            tooltip:
+                String::new(),
+
+            left_click:
+                String::new(),
+
+            right_click:
+                String::new(),
+
+            middle_click:
+                String::new(),
+
+            scroll_up:
+                String::new(),
+
+            scroll_down:
+                String::new(),
         }
     }
 }
@@ -583,10 +752,11 @@ impl ModuleConfig {
             format:
                 "{icon}  {value}%".into(),
 
-            icon: "󰍛".into(),
+            icon:
+                "󰍛".into(),
 
             color:
-                "#cba6f7".into(),
+                "#ffffff".into(),
 
             ..Default::default()
         }
@@ -597,10 +767,11 @@ impl ModuleConfig {
             format:
                 "{icon}  {value}%".into(),
 
-            icon: "󰘚".into(),
+            icon:
+                "󰘚".into(),
 
             color:
-                "#a6e3a1".into(),
+                "#ffffff".into(),
 
             ..Default::default()
         }
@@ -611,10 +782,11 @@ impl ModuleConfig {
             format:
                 "{icon}  {value}".into(),
 
-            icon: "󰖩".into(),
+            icon:
+                "󰖩".into(),
 
             color:
-                "#89dceb".into(),
+                "#ffffff".into(),
 
             ..Default::default()
         }
@@ -625,10 +797,11 @@ impl ModuleConfig {
             format:
                 "{icon}  {value}%".into(),
 
-            icon: "󰕾".into(),
+            icon:
+                "󰕾".into(),
 
             color:
-                "#f5c2e7".into(),
+                "#ffffff".into(),
 
             ..Default::default()
         }
@@ -639,10 +812,11 @@ impl ModuleConfig {
             format:
                 "{icon}  {value}%".into(),
 
-            icon: "󰁹".into(),
+            icon:
+                "󰁹".into(),
 
             color:
-                "#f9e2af".into(),
+                "#ffffff".into(),
 
             ..Default::default()
         }
@@ -675,6 +849,10 @@ struct ClockConfig {
     font_weight: i32,
 
     padding: i32,
+
+    width: i32,
+    height: i32,
+
     radius: i32,
 
     interval: u64,
@@ -693,34 +871,52 @@ impl Default for ClockConfig {
                 "%a  %d %b  •  %H:%M".into(),
 
             color:
-                "#89b4fa".into(),
+                "#ffffff".into(),
 
             background:
-                "rgba(137,180,250,0.10)"
-                    .into(),
+                String::new(),
 
             hover_background:
-                "rgba(137,180,250,0.18)"
-                    .into(),
+                String::new(),
 
-            opacity: 1.0,
+            opacity:
+                0.0,
 
             border_color:
-                "transparent".into(),
+                String::new(),
 
-            border_width: 0,
+            border_width:
+                -1,
 
-            font_size: 12,
-            font_weight: 800,
+            font_size:
+                12,
 
-            padding: 14,
-            radius: 9,
+            font_weight:
+                800,
 
-            interval: 1000,
+            padding:
+                14,
 
-            left_click: String::new(),
-            right_click: String::new(),
-            middle_click: String::new(),
+            width:
+                0,
+
+            height:
+                0,
+
+            radius:
+                -1,
+
+            interval:
+                1000,
+
+            left_click:
+                String::new(),
+
+            right_click:
+                String::new(),
+
+            middle_click:
+                String::new(),
         }
     }
 }
@@ -731,9 +927,12 @@ impl Default for ClockConfig {
 // ============================================================
 
 fn config_path() -> PathBuf {
-    let home = std::env::var_os("HOME")
-        .map(PathBuf::from)
-        .unwrap_or_else(|| PathBuf::from("."));
+    let home =
+        std::env::var_os("HOME")
+            .map(PathBuf::from)
+            .unwrap_or_else(
+                || PathBuf::from("."),
+            );
 
     home.join(".config")
         .join("raixbar")
@@ -746,10 +945,14 @@ fn config_path() -> PathBuf {
 // ============================================================
 
 fn load_config() -> Config {
-    let path = config_path();
+    let path =
+        config_path();
 
-    if let Some(parent) = path.parent() {
-        let _ = fs::create_dir_all(parent);
+    if let Some(parent) =
+        path.parent()
+    {
+        let _ =
+            fs::create_dir_all(parent);
     }
 
     if !path.exists() {
@@ -757,10 +960,15 @@ fn load_config() -> Config {
             Config::default();
 
         if let Ok(data) =
-            toml::to_string_pretty(&config)
+            toml::to_string_pretty(
+                &config,
+            )
         {
             let _ =
-                fs::write(&path, data);
+                fs::write(
+                    &path,
+                    data,
+                );
         }
 
         return config;
@@ -768,8 +976,11 @@ fn load_config() -> Config {
 
     match fs::read_to_string(&path) {
         Ok(data) => {
-            match toml::from_str::<Config>(&data) {
-                Ok(config) => config,
+            match toml::from_str::<Config>(
+                &data,
+            ) {
+                Ok(config) =>
+                    config,
 
                 Err(error) => {
                     eprintln!(
@@ -797,8 +1008,11 @@ fn load_config() -> Config {
 // ============================================================
 
 struct AppState {
-    labels: HashMap<String, Label>,
-    workspace_box: GtkBox,
+    labels:
+        HashMap<String, Label>,
+
+    workspace_box:
+        GtkBox,
 }
 
 impl AppState {
@@ -829,7 +1043,9 @@ fn main() {
             )
             .build();
 
-    app.connect_activate(build_ui);
+    app.connect_activate(
+        build_ui,
+    );
 
     app.run();
 }
@@ -839,7 +1055,9 @@ fn main() {
 // BUILD UI
 // ============================================================
 
-fn build_ui(app: &Application) {
+fn build_ui(
+    app: &Application,
+) {
     let config =
         load_config();
 
@@ -858,6 +1076,7 @@ fn build_ui(app: &Application) {
 
     window.init_layer_shell();
 
+
     let layer =
         match config
             .bar
@@ -875,7 +1094,9 @@ fn build_ui(app: &Application) {
                 Layer::Top,
         };
 
-    window.set_layer(layer);
+    window.set_layer(
+        layer,
+    );
 
 
     let keyboard =
@@ -901,7 +1122,7 @@ fn build_ui(app: &Application) {
 
 
     // ========================================================
-    // ANCHORS
+    // POSITION
     // ========================================================
 
     let bottom =
@@ -911,6 +1132,11 @@ fn build_ui(app: &Application) {
             .eq_ignore_ascii_case(
                 "bottom",
             );
+
+
+    // ========================================================
+    // WIDTH
+    // ========================================================
 
     if config.bar.width == 0 {
         window.set_anchor(
@@ -946,6 +1172,10 @@ fn build_ui(app: &Application) {
     );
 
 
+    // ========================================================
+    // MARGINS
+    // ========================================================
+
     window.set_margin(
         Edge::Top,
         config.bar.margin_top,
@@ -967,6 +1197,10 @@ fn build_ui(app: &Application) {
     );
 
 
+    // ========================================================
+    // EXCLUSIVE ZONE
+    // ========================================================
+
     window.set_exclusive_zone(
         config.bar.exclusive_zone,
     );
@@ -983,7 +1217,8 @@ fn build_ui(app: &Application) {
     let css =
         CssProvider::new();
 
-    let css_data = format!(
+    let css_data =
+        format!(
 r#"
 * {{
     font-family:
@@ -996,9 +1231,17 @@ window {{
     background: transparent;
 }}
 
+
+/* ============================================================
+   BAR
+   ============================================================ */
+
 .raix-bar {{
-    background: {bar_background};
-    opacity: {bar_opacity};
+    background:
+        {bar_background};
+
+    opacity:
+        {bar_opacity};
 
     border:
         {bar_border_width}px solid
@@ -1018,14 +1261,22 @@ window {{
 
     padding-bottom:
         {bar_vertical}px;
+}}
 
+
+/* ============================================================
+   CENTER BOX
+   ============================================================ */
+
+.bar-center {{
     min-height:
         {height}px;
 }}
 
-.bar-center {{
-    min-height: {height}px;
-}}
+
+/* ============================================================
+   ZONES
+   ============================================================ */
 
 .left-zone,
 .center-zone,
@@ -1034,19 +1285,26 @@ window {{
 }}
 
 .left-zone {{
-    padding-left: {zone_padding}px;
+    padding-left:
+        {zone_padding}px;
 }}
 
 .right-zone {{
-    padding-right: {zone_padding}px;
+    padding-right:
+        {zone_padding}px;
 }}
 
+
+/* ============================================================
+   GLOBAL MODULE
+   ============================================================ */
+
 .module {{
+    color:
+        {module_color};
+
     background:
         {module_background};
-
-    color:
-        {text_color};
 
     opacity:
         {module_opacity};
@@ -1084,126 +1342,12 @@ window {{
 
 
 /* ============================================================
-   CPU
-   ============================================================ */
-
-.module-cpu {{
-    color: {cpu_color};
-    background: {cpu_background};
-    opacity: {cpu_opacity};
-
-    border:
-        {cpu_border_width}px solid
-        {cpu_border_color};
-
-    border-radius:
-        {cpu_radius}px;
-}}
-
-.module-cpu:hover {{
-    background:
-        {cpu_hover};
-}}
-
-
-/* ============================================================
-   RAM
-   ============================================================ */
-
-.module-ram {{
-    color: {ram_color};
-    background: {ram_background};
-    opacity: {ram_opacity};
-
-    border:
-        {ram_border_width}px solid
-        {ram_border_color};
-
-    border-radius:
-        {ram_radius}px;
-}}
-
-.module-ram:hover {{
-    background:
-        {ram_hover};
-}}
-
-
-/* ============================================================
-   NETWORK
-   ============================================================ */
-
-.module-network {{
-    color: {network_color};
-    background: {network_background};
-    opacity: {network_opacity};
-
-    border:
-        {network_border_width}px solid
-        {network_border_color};
-
-    border-radius:
-        {network_radius}px;
-}}
-
-.module-network:hover {{
-    background:
-        {network_hover};
-}}
-
-
-/* ============================================================
-   VOLUME
-   ============================================================ */
-
-.module-volume {{
-    color: {volume_color};
-    background: {volume_background};
-    opacity: {volume_opacity};
-
-    border:
-        {volume_border_width}px solid
-        {volume_border_color};
-
-    border-radius:
-        {volume_radius}px;
-}}
-
-.module-volume:hover {{
-    background:
-        {volume_hover};
-}}
-
-
-/* ============================================================
-   BATTERY
-   ============================================================ */
-
-.module-battery {{
-    color: {battery_color};
-    background: {battery_background};
-    opacity: {battery_opacity};
-
-    border:
-        {battery_border_width}px solid
-        {battery_border_color};
-
-    border-radius:
-        {battery_radius}px;
-}}
-
-.module-battery:hover {{
-    background:
-        {battery_hover};
-}}
-
-
-/* ============================================================
    CLOCK
    ============================================================ */
 
 .module-clock {{
-    color: {clock_color};
+    color:
+        {clock_color};
 
     background:
         {clock_background};
@@ -1313,6 +1457,10 @@ window {{
 
     border-radius:
         {workspace_radius}px;
+
+    border:
+        {workspace_border_width}px solid
+        {workspace_border_color};
 }}
 
 .workspace {{
@@ -1332,7 +1480,7 @@ window {{
         14px;
 
     min-height:
-        28px;
+        {workspace_height}px;
 
     border-radius:
         {workspace_radius}px;
@@ -1399,6 +1547,9 @@ window {{
         zone_padding =
             config.spacing.zone,
 
+        module_color =
+            config.style.text_color,
+
         module_background =
             config.style.module_background,
 
@@ -1418,13 +1569,10 @@ window {{
             config.style.module_radius,
 
         module_padding =
-            config.spacing.horizontal,
+            config.style.module_padding,
 
         module_vertical =
             config.spacing.vertical,
-
-        text_color =
-            config.style.text_color,
 
         font_size =
             config.font.size,
@@ -1433,136 +1581,44 @@ window {{
             config.font.weight,
 
 
-        cpu_color =
-            config.cpu.color,
-
-        cpu_background =
-            config.cpu.background,
-
-        cpu_hover =
-            config.cpu.hover_background,
-
-        cpu_opacity =
-            config.cpu.opacity,
-
-        cpu_border_color =
-            config.cpu.border_color,
-
-        cpu_border_width =
-            config.cpu.border_width,
-
-        cpu_radius =
-            config.cpu.radius,
-
-
-        ram_color =
-            config.ram.color,
-
-        ram_background =
-            config.ram.background,
-
-        ram_hover =
-            config.ram.hover_background,
-
-        ram_opacity =
-            config.ram.opacity,
-
-        ram_border_color =
-            config.ram.border_color,
-
-        ram_border_width =
-            config.ram.border_width,
-
-        ram_radius =
-            config.ram.radius,
-
-
-        network_color =
-            config.network.color,
-
-        network_background =
-            config.network.background,
-
-        network_hover =
-            config.network.hover_background,
-
-        network_opacity =
-            config.network.opacity,
-
-        network_border_color =
-            config.network.border_color,
-
-        network_border_width =
-            config.network.border_width,
-
-        network_radius =
-            config.network.radius,
-
-
-        volume_color =
-            config.volume.color,
-
-        volume_background =
-            config.volume.background,
-
-        volume_hover =
-            config.volume.hover_background,
-
-        volume_opacity =
-            config.volume.opacity,
-
-        volume_border_color =
-            config.volume.border_color,
-
-        volume_border_width =
-            config.volume.border_width,
-
-        volume_radius =
-            config.volume.radius,
-
-
-        battery_color =
-            config.battery.color,
-
-        battery_background =
-            config.battery.background,
-
-        battery_hover =
-            config.battery.hover_background,
-
-        battery_opacity =
-            config.battery.opacity,
-
-        battery_border_color =
-            config.battery.border_color,
-
-        battery_border_width =
-            config.battery.border_width,
-
-        battery_radius =
-            config.battery.radius,
-
-
         clock_color =
             config.clock.color,
 
         clock_background =
-            config.clock.background,
+            effective_string(
+                &config.clock.background,
+                &config.style.clock_background,
+            ),
 
         clock_hover =
-            config.clock.hover_background,
+            effective_string(
+                &config.clock.hover_background,
+                &config.style.clock_hover_background,
+            ),
 
         clock_opacity =
-            config.clock.opacity,
+            effective_f32(
+                config.clock.opacity,
+                config.style.clock_opacity,
+            ),
 
         clock_border_color =
-            config.clock.border_color,
+            effective_string(
+                &config.clock.border_color,
+                &config.style.clock_border_color,
+            ),
 
         clock_border_width =
-            config.clock.border_width,
+            effective_i32(
+                config.clock.border_width,
+                config.style.clock_border_width,
+            ),
 
         clock_radius =
-            config.clock.radius,
+            effective_i32(
+                config.clock.radius,
+                config.style.clock_radius,
+            ),
 
         clock_padding =
             config.clock.padding,
@@ -1633,14 +1689,27 @@ window {{
         workspace_padding =
             config.workspaces.padding,
 
+        workspace_height =
+            config.workspaces.height,
+
         workspace_radius =
             config.style.workspace_radius,
+
+        workspace_border_color =
+            config.style.workspace_border_color,
+
+        workspace_border_width =
+            config.style.workspace_border_width,
 
         workspace_size =
             config.font.workspace_size,
     );
 
-    css.load_from_data(&css_data);
+
+    css.load_from_data(
+        &css_data,
+    );
+
 
     if let Some(display) =
         gdk::Display::default()
@@ -1666,8 +1735,13 @@ window {{
     root.set_hexpand(true);
     root.set_vexpand(true);
 
-    root.set_halign(Align::Fill);
-    root.set_valign(Align::Fill);
+    root.set_halign(
+        Align::Fill,
+    );
+
+    root.set_valign(
+        Align::Fill,
+    );
 
 
     // ========================================================
@@ -1693,18 +1767,7 @@ window {{
     );
 
 
-    // ========================================================
-    // WIDTH
-    // ========================================================
-
     if config.bar.width > 0 {
-        /*
-         * Fixed width.
-         *
-         * Important:
-         * Layer-shell window itself is allowed to
-         * determine its requested size.
-         */
         bar.set_hexpand(false);
 
         bar.set_width_request(
@@ -1720,9 +1783,6 @@ window {{
             config.bar.height,
         );
     } else {
-        /*
-         * Full screen width.
-         */
         bar.set_hexpand(true);
 
         bar.set_halign(
@@ -1832,11 +1892,11 @@ window {{
 
 
     // ========================================================
-    // CONFIG DRIVEN MODULES
+    // MODULES
     // ========================================================
 
-    for module in
-        &config.layout.left
+    for module
+        in &config.layout.left
     {
         add_module(
             &left,
@@ -1846,8 +1906,8 @@ window {{
         );
     }
 
-    for module in
-        &config.layout.center
+    for module
+        in &config.layout.center
     {
         add_module(
             &center,
@@ -1857,8 +1917,8 @@ window {{
         );
     }
 
-    for module in
-        &config.layout.right
+    for module
+        in &config.layout.right
     {
         add_module(
             &right,
@@ -1889,7 +1949,9 @@ window {{
         &center_box,
     );
 
-    root.append(&bar);
+    root.append(
+        &bar,
+    );
 
     window.set_child(
         Some(&root),
@@ -1958,6 +2020,46 @@ window {{
 
 
 // ============================================================
+// EFFECTIVE VALUES
+// ============================================================
+
+fn effective_string(
+    individual: &str,
+    global: &str,
+) -> String {
+    if individual.trim().is_empty() {
+        global.to_string()
+    } else {
+        individual.to_string()
+    }
+}
+
+
+fn effective_i32(
+    individual: i32,
+    global: i32,
+) -> i32 {
+    if individual < 0 {
+        global
+    } else {
+        individual
+    }
+}
+
+
+fn effective_f32(
+    individual: f32,
+    global: f32,
+) -> f32 {
+    if individual <= 0.0 {
+        global
+    } else {
+        individual
+    }
+}
+
+
+// ============================================================
 // ADD MODULE
 // ============================================================
 
@@ -1989,6 +2091,13 @@ fn add_module(
                         "workspace-container",
                     );
 
+                workspace_box
+                    .set_spacing(
+                        config
+                            .workspaces
+                            .gap,
+                    );
+
                 parent.append(
                     &workspace_box,
                 );
@@ -2001,6 +2110,7 @@ fn add_module(
                     parent,
                     "cpu",
                     &config.cpu,
+                    config,
                     state,
                 );
             }
@@ -2012,6 +2122,7 @@ fn add_module(
                     parent,
                     "ram",
                     &config.ram,
+                    config,
                     state,
                 );
             }
@@ -2023,6 +2134,7 @@ fn add_module(
                     parent,
                     "network",
                     &config.network,
+                    config,
                     state,
                 );
             }
@@ -2034,6 +2146,7 @@ fn add_module(
                     parent,
                     "volume",
                     &config.volume,
+                    config,
                     state,
                 );
             }
@@ -2045,6 +2158,7 @@ fn add_module(
                     parent,
                     "battery",
                     &config.battery,
+                    config,
                     state,
                 );
             }
@@ -2062,7 +2176,9 @@ fn add_module(
 
         "separator" => {
             let label =
-                Label::new(Some("│"));
+                Label::new(
+                    Some("│"),
+                );
 
             label.add_css_class(
                 "module",
@@ -2087,99 +2203,66 @@ fn add_module(
 
 
 // ============================================================
-// LOGO
-//
-// IMPORTANT:
-//
-// logo.enabled
-//     = master switch
-//
-// logo.icon_enabled
-//     = icon switch
-//
-// logo_text.enabled
-//     = text switch
-//
-// They are completely independent.
+// APPLY INDIVIDUAL MODULE SIZE
 // ============================================================
 
-fn add_logo(
-    parent: &GtkBox,
-    config: &Config,
+fn apply_module_size(
+    widget: &Label,
+    module: &ModuleConfig,
+    global: &StyleConfig,
 ) {
-    if !config.logo.enabled {
-        return;
-    }
+    let width =
+        if module.width > 0 {
+            module.width
+        } else {
+            global.module_width
+        };
 
+    let height =
+        if module.height > 0 {
+            module.height
+        } else {
+            global.module_height
+        };
 
-    // --------------------------------------------------------
-    // ICON
-    // --------------------------------------------------------
-
-    if config.logo.icon_enabled
-        && !config.logo.icon.is_empty()
-    {
-        let label =
-            Label::new(
-                Some(
-                    &config.logo.icon,
-                ),
-            );
-
-        label.add_css_class(
-            "logo-icon",
-        );
-
-        parent.append(
-            &label,
+    if width > 0 {
+        widget.set_width_request(
+            width,
         );
     }
 
-
-    // --------------------------------------------------------
-    // TEXT
-    // --------------------------------------------------------
-
-    if config.logo_text.enabled
-        && !config.logo_text.text.is_empty()
-    {
-        let label =
-            Label::new(
-                Some(
-                    &config.logo_text.text,
-                ),
-            );
-
-        label.add_css_class(
-            "logo-text",
-        );
-
-        parent.append(
-            &label,
+    if height > 0 {
+        widget.set_height_request(
+            height,
         );
     }
 }
 
 
 // ============================================================
-// GENERIC MODULE
+// ADD GENERIC MODULE
 // ============================================================
 
 fn add_generic_module(
     parent: &GtkBox,
     name: &str,
     module: &ModuleConfig,
+    config: &Config,
     state: Rc<RefCell<AppState>>,
 ) {
     let label =
-        Label::new(Some("..."));
+        Label::new(
+            Some("..."),
+        );
 
     label.add_css_class(
         "module",
     );
 
     label.add_css_class(
-        &format!("module-{name}"),
+        &format!(
+            "module-{name}"
+        ),
     );
 
     label.set_halign(
@@ -2190,20 +2273,173 @@ fn add_generic_module(
         Align::Center,
     );
 
-    if !module.tooltip.is_empty() {
-        label.set_tooltip_text(
-            Some(&module.tooltip),
+
+    // --------------------------------------------------------
+    // Individual visual settings
+    //
+    // GTK CSS provider is generated here so individual values
+    // can override global module settings.
+    // --------------------------------------------------------
+
+    let background =
+        effective_string(
+            &module.background,
+            &config.style.module_background,
+        );
+
+    let hover_background =
+        effective_string(
+            &module.hover_background,
+            &config.style.module_hover_background,
+        );
+
+    let border_color =
+        effective_string(
+            &module.border_color,
+            &config.style.module_border_color,
+        );
+
+    let border_width =
+        effective_i32(
+            module.border_width,
+            config.style.module_border_width,
+        );
+
+    let radius =
+        effective_i32(
+            module.radius,
+            config.style.module_radius,
+        );
+
+    let padding =
+        if module.padding > 0 {
+            module.padding
+        } else {
+            config.style.module_padding
+        };
+
+    let opacity =
+        effective_f32(
+            module.opacity,
+            config.style.module_opacity,
+        );
+
+
+    let css =
+        format!(
+r#"
+.module-{name} {{
+    color: {color};
+    background: {background};
+    opacity: {opacity};
+
+    border:
+        {border_width}px solid
+        {border_color};
+
+    border-radius:
+        {radius}px;
+
+    padding-left:
+        {padding}px;
+
+    padding-right:
+        {padding}px;
+
+    padding-top:
+        {vertical}px;
+
+    padding-bottom:
+        {vertical}px;
+}}
+
+.module-{name}:hover {{
+    background:
+        {hover_background};
+}}
+"#,
+        name =
+            name,
+
+        color =
+            if module.color.is_empty() {
+                config.style.text_color.clone()
+            } else {
+                module.color.clone()
+            },
+
+        background =
+            background,
+
+        hover_background =
+            hover_background,
+
+        opacity =
+            opacity,
+
+        border_width =
+            border_width,
+
+        border_color =
+            border_color,
+
+        radius =
+            radius,
+
+        padding =
+            padding,
+
+        vertical =
+            config.spacing.vertical,
+    );
+
+
+    let provider =
+        CssProvider::new();
+
+    provider.load_from_data(
+        &css,
+    );
+
+
+    if let Some(display) =
+        gdk::Display::default()
+    {
+        gtk4::style_context_add_provider_for_display(
+            &display,
+            &provider,
+            gtk4::STYLE_PROVIDER_PRIORITY_APPLICATION + 10,
         );
     }
 
+
+    apply_module_size(
+        &label,
+        module,
+        &config.style,
+    );
+
+
+    if !module.tooltip.is_empty() {
+        label.set_tooltip_text(
+            Some(
+                &module.tooltip,
+            ),
+        );
+    }
+
+
     setup_clicks(
         &label,
+
         &module.left_click,
         &module.right_click,
         &module.middle_click,
+
         &module.scroll_up,
         &module.scroll_down,
     );
+
 
     state
         .borrow_mut()
@@ -2212,6 +2448,7 @@ fn add_generic_module(
             name.to_string(),
             label.clone(),
         );
+
 
     parent.append(
         &label,
@@ -2229,7 +2466,9 @@ fn add_clock(
     state: Rc<RefCell<AppState>>,
 ) {
     let label =
-        Label::new(Some("--:--"));
+        Label::new(
+            Some("--:--"),
+        );
 
     label.add_css_class(
         "module",
@@ -2247,14 +2486,150 @@ fn add_clock(
         Align::Center,
     );
 
+
+    // --------------------------------------------------------
+    // Clock individual settings
+    // --------------------------------------------------------
+
+    let background =
+        effective_string(
+            &config.clock.background,
+            &config.style.clock_background,
+        );
+
+    let hover_background =
+        effective_string(
+            &config.clock.hover_background,
+            &config.style.clock_hover_background,
+        );
+
+    let border_color =
+        effective_string(
+            &config.clock.border_color,
+            &config.style.clock_border_color,
+        );
+
+    let border_width =
+        effective_i32(
+            config.clock.border_width,
+            config.style.clock_border_width,
+        );
+
+    let radius =
+        effective_i32(
+            config.clock.radius,
+            config.style.clock_radius,
+        );
+
+
+    let css =
+        format!(
+r#"
+.module-clock {{
+    color:
+        {color};
+
+    background:
+        {background};
+
+    border:
+        {border_width}px solid
+        {border_color};
+
+    border-radius:
+        {radius}px;
+
+    padding-left:
+        {padding}px;
+
+    padding-right:
+        {padding}px;
+
+    font-size:
+        {font_size}px;
+
+    font-weight:
+        {font_weight};
+}}
+
+.module-clock:hover {{
+    background:
+        {hover_background};
+}}
+"#,
+
+        color =
+            config.clock.color,
+
+        background =
+            background,
+
+        hover_background =
+            hover_background,
+
+        border_color =
+            border_color,
+
+        border_width =
+            border_width,
+
+        radius =
+            radius,
+
+        padding =
+            config.clock.padding,
+
+        font_size =
+            config.clock.font_size,
+
+        font_weight =
+            config.clock.font_weight,
+    );
+
+
+    let provider =
+        CssProvider::new();
+
+    provider.load_from_data(
+        &css,
+    );
+
+
+    if let Some(display) =
+        gdk::Display::default()
+    {
+        gtk4::style_context_add_provider_for_display(
+            &display,
+            &provider,
+            gtk4::STYLE_PROVIDER_PRIORITY_APPLICATION + 10,
+        );
+    }
+
+
+    if config.clock.width > 0 {
+        label.set_width_request(
+            config.clock.width,
+        );
+    }
+
+    if config.clock.height > 0 {
+        label.set_height_request(
+            config.clock.height,
+        );
+    }
+
+
     setup_clicks(
         &label,
+
         &config.clock.left_click,
         &config.clock.right_click,
         &config.clock.middle_click,
+
         "",
         "",
     );
+
 
     state
         .borrow_mut()
@@ -2264,11 +2639,65 @@ fn add_clock(
             label.clone(),
         );
 
+
     parent.append(
         &label,
     );
 }
 
+
+// ============================================================
+// LOGO
+// ============================================================
+
+fn add_logo(
+    parent: &GtkBox,
+    config: &Config,
+) {
+    if !config.logo.enabled {
+        return;
+    }
+
+    if config.logo.icon_enabled
+        && !config.logo.icon.is_empty()
+    {
+        let label =
+            Label::new(Some(
+                &config.logo.icon,
+            ));
+
+        label.add_css_class("logo-icon");
+
+        label.set_halign(Align::Center);
+        label.set_valign(Align::Center);
+
+        setup_clicks(
+            &label,
+
+            &config.logo.left_click,
+            &config.logo.right_click,
+            &config.logo.middle_click,
+
+            "",
+            "",
+        );
+
+        parent.append(&label);
+    }
+
+    if config.logo_text.enabled
+        && !config.logo_text.text.is_empty()
+    {
+        let label =
+            Label::new(Some(
+                &config.logo_text.text,
+            ));
+
+        label.add_css_class("logo-text");
+
+        parent.append(&label);
+    }
+}
 
 // ============================================================
 // CLICKS
@@ -2304,13 +2733,19 @@ fn setup_clicks(
             move |gesture, _, _, _| {
                 match gesture.current_button() {
                     1 =>
-                        run_command(&left),
+                        run_command(
+                            &left,
+                        ),
 
                     2 =>
-                        run_command(&middle),
+                        run_command(
+                            &middle,
+                        ),
 
                     3 =>
-                        run_command(&right),
+                        run_command(
+                            &right,
+                        ),
 
                     _ => {}
                 }
@@ -2340,11 +2775,15 @@ fn setup_clicks(
         controller.connect_scroll(
             move |_, _, dy| {
                 if dy < 0.0 {
-                    run_command(&up);
+                    run_command(
+                        &up,
+                    );
                 }
 
                 if dy > 0.0 {
-                    run_command(&down);
+                    run_command(
+                        &down,
+                    );
                 }
 
                 glib::Propagation::Stop
@@ -2362,7 +2801,9 @@ fn setup_clicks(
 // COMMAND
 // ============================================================
 
-fn run_command(command: &str) {
+fn run_command(
+    command: &str,
+) {
     let command =
         command.trim();
 
@@ -2586,6 +3027,10 @@ fn update_all_modules(
 }
 
 
+// ============================================================
+// UPDATE LABEL
+// ============================================================
+
 fn update_label(
     state:
         &Rc<RefCell<AppState>>,
@@ -2629,7 +3074,7 @@ fn format_module(
 
 
 // ============================================================
-// CLOCK
+// CLOCK UPDATE
 // ============================================================
 
 fn update_clock(
@@ -2685,9 +3130,13 @@ fn read_cpu_stat()
 
     let line =
         data.lines()
-            .find(|line| {
-                line.starts_with("cpu ")
-            })?;
+            .find(
+                |line| {
+                    line.starts_with(
+                        "cpu ",
+                    )
+                },
+            )?;
 
     let values:
         Vec<u64> =
@@ -2695,7 +3144,9 @@ fn read_cpu_stat()
             .split_whitespace()
             .skip(1)
             .filter_map(
-                |v| v.parse().ok(),
+                |v| {
+                    v.parse().ok()
+                },
             )
             .collect();
 
@@ -2704,15 +3155,18 @@ fn read_cpu_stat()
     }
 
     let idle =
-        values[3] + values[4];
+        values[3]
+            + values[4];
 
     let total =
         values.iter().sum();
 
-    Some((
-        total,
-        idle,
-    ))
+    Some(
+        (
+            total,
+            idle,
+        ),
+    )
 }
 
 
@@ -2770,7 +3224,7 @@ fn cpu_usage() -> String {
                                 * 100.0
                         )
                         .round()
-                            as u64
+                        as u64
                     }
                 } else {
                     0
@@ -2807,7 +3261,9 @@ fn ram_usage() -> String {
     let mut available =
         0u64;
 
-    for line in data.lines() {
+    for line in
+        data.lines()
+    {
         if let Some(value) =
             line.strip_prefix(
                 "MemTotal:",
@@ -2818,7 +3274,9 @@ fn ram_usage() -> String {
                     .split_whitespace()
                     .next()
                     .and_then(
-                        |v| v.parse().ok(),
+                        |v| {
+                            v.parse().ok()
+                        },
                     )
                     .unwrap_or(0);
         }
@@ -2833,7 +3291,9 @@ fn ram_usage() -> String {
                     .split_whitespace()
                     .next()
                     .and_then(
-                        |v| v.parse().ok(),
+                        |v| {
+                            v.parse().ok()
+                        },
                     )
                     .unwrap_or(0);
         }
@@ -2849,7 +3309,8 @@ fn ram_usage() -> String {
         );
 
     (
-        used.saturating_mul(100)
+        used
+            .saturating_mul(100)
             / total
     )
     .to_string()
@@ -2878,7 +3339,9 @@ fn network_status() -> String {
     let mut ethernet =
         None;
 
-    for entry in entries.flatten() {
+    for entry in
+        entries.flatten()
+    {
         let path =
             entry.path();
 
@@ -2906,9 +3369,9 @@ fn network_status() -> String {
             continue;
         }
 
-        if path.join(
-            "wireless",
-        ).exists()
+        if path
+            .join("wireless")
+            .exists()
         {
             wireless =
                 Some(name);
@@ -3060,7 +3523,9 @@ fn battery_status() -> String {
             fs::read_to_string(
                 entry
                     .path()
-                    .join("capacity"),
+                    .join(
+                        "capacity",
+                    ),
             )
         {
             return value
@@ -3093,12 +3558,6 @@ fn update_workspaces(
     container: &GtkBox,
     config: &WorkspaceConfig,
 ) {
-    // GTK4 Box is not IntoIterator.
-    //
-    // Correct way to remove children:
-    // first_child() -> remove()
-    //
-
     while let Some(child) =
         container.first_child()
     {
@@ -3125,6 +3584,7 @@ fn update_workspaces(
             );
         }
 
+
         for id in
             &config.numbers
         {
@@ -3142,6 +3602,7 @@ fn update_workspaces(
                 } else {
                     continue;
                 };
+
 
             add_workspace_button(
                 container,
@@ -3236,9 +3697,11 @@ fn add_workspace_button(
 
     setup_clicks(
         &label,
+
         &left,
         &right,
         &middle,
+
         "",
         "",
     );
@@ -3272,6 +3735,19 @@ fn add_workspace_button(
     }
 
 
+    if config.width > 0 {
+        label.set_width_request(
+            config.width,
+        );
+    }
+
+    if config.height > 0 {
+        label.set_height_request(
+            config.height,
+        );
+    }
+
+
     container.append(
         &label,
     );
@@ -3289,22 +3765,24 @@ fn hyprland_workspaces()
         get_active_workspace();
 
     let output =
-        match Command::new("hyprctl")
-            .args([
-                "-j",
-                "workspaces",
-            ])
-            .output()
+        match Command::new(
+            "hyprctl",
+        )
+        .args([
+            "-j",
+            "workspaces",
+        ])
+        .output()
+    {
+        Ok(output)
+            if output.status.success() =>
         {
-            Ok(output)
-                if output.status.success() =>
-            {
-                output
-            }
+            output
+        }
 
-            _ =>
-                return Vec::new(),
-        };
+        _ =>
+            return Vec::new(),
+    };
 
     let text =
         String::from_utf8_lossy(
@@ -3326,13 +3804,15 @@ fn get_active_workspace()
     -> Option<i32>
 {
     let output =
-        Command::new("hyprctl")
-            .args([
-                "-j",
-                "activeworkspace",
-            ])
-            .output()
-            .ok()?;
+        Command::new(
+            "hyprctl",
+        )
+        .args([
+            "-j",
+            "activeworkspace",
+        ])
+        .output()
+        .ok()?;
 
     if !output.status.success() {
         return None;
@@ -3466,6 +3946,7 @@ fn parse_workspace_json(
             };
     }
 
+
     result.sort_by_key(
         |workspace|
             workspace.id,
@@ -3484,7 +3965,9 @@ fn extract_json_number(
     key: &str,
 ) -> Option<i32> {
     let needle =
-        format!("\"{key}\"");
+        format!(
+            "\"{key}\""
+        );
 
     let position =
         text.find(
