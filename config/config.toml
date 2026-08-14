@@ -1,153 +1,70 @@
-# ============================================================
-# RAIXBAR
-# Waybar-style full width bar
-#
-# LEFT | CENTER | RIGHT
-# ============================================================
-
-
-# ============================================================
-# BAR
-# ============================================================
-
 [bar]
+
 width = 1350
-height = 44
-
-position = "top"
-
+height = 30
+position = "bottom"
 margin_top = 0
 margin_bottom = 0
 margin_left = 0
 margin_right = 0
-
-exclusive_zone = 44
-
+exclusive_zone = 30
 layer = "top"
 keyboard_mode = "none"
 
 
-# ============================================================
-# STYLE
-#
-# IMPORTANT:
-#
-# bar_background controls ONLY the full bar.
-#
-# Set:
-#
-# bar_background = "transparent"
-#
-# for no bar background.
-#
-# Individual modules have their own backgrounds below.
-# ============================================================
 
 [style]
 
 bar_background = "transparent"
 bar_opacity = 1.0
-
 bar_border_color = "transparent"
 bar_border_width = 0
 bar_radius = 0
-
-
-# Generic module fallback
-
 module_background = "rgba(255,255,255,0.055)"
+module_hover_background = "rgba(255,255,255,0.10)"
 module_opacity = 1.0
-
-module_hover_background = "rgba(255,255,255,0.09)"
-
-module_border_color = "transparent"
+module_border_color = "rgba(255,255,255,0.08)"
 module_border_width = 0
 module_radius = 9
+module_padding_left = 10
+module_padding_right = 10
+module_padding_top = 10
+module_padding_bottom = 10
+module_width = 0
+module_height = 0
+text_color = "#ffffff"
+muted_color = "#a1a1aa"
+accent_color = "#ffffff"
 
 
-# General colors
-
-text_color = "#cdd6f4"
-muted_color = "#6c7086"
-accent_color = "#89b4fa"
-
-
-# ============================================================
-# WORKSPACE STYLE
-# ============================================================
-
-workspace_background = "rgba(255,255,255,0.035)"
-
-workspace_active_background = "rgba(137,180,250,0.20)"
-
-workspace_hover_background = "rgba(255,255,255,0.08)"
-
-workspace_urgent_background = "rgba(243,139,168,0.22)"
-
-workspace_active_color = "#ffffff"
-workspace_inactive_color = "#6c7086"
-workspace_urgent_color = "#f38ba8"
-
-workspace_border_color = "transparent"
-workspace_border_width = 0
-workspace_radius = 8
-
-
-# ============================================================
-# CLOCK STYLE
-# ============================================================
-
-clock_background = "rgba(255,255,255,0.055)"
-clock_opacity = 1.0
-
-clock_hover_background = "rgba(255,255,255,0.09)"
-
-clock_border_color = "transparent"
-clock_border_width = 0
-clock_radius = 9
-
-
-# ============================================================
-# FONT
-# ============================================================
 
 [font]
 
 family = "JetBrainsMono Nerd Font"
-
 size = 12
-weight = 650
-
+weight = 600
 logo_size = 17
 workspace_size = 12
 
 
-# ============================================================
-# SPACING
-# ============================================================
 
 [spacing]
 
 zone = 0
-
 module = 4
-
 horizontal = 10
 vertical = 3
-
 bar_horizontal = 5
 bar_vertical = 4
 
 
-# ============================================================
-# LAYOUT
-# ============================================================
 
 [layout]
 
 left = [
     "logo",
-    "workspaces"
+    "workspaces",
+    "custom.arch"
 ]
 
 center = [
@@ -162,285 +79,166 @@ right = [
     "battery"
 ]
 
+[custom."arch"]
 
-# ============================================================
-# LOGO
-# ============================================================
+enabled = true
+format = "Terminal"
+interval = 5000
+left_click = "kitty"
+right_click = ""
+middle_click = ""
+background = "rgba(255,255,255,0.055)"
+hover_background = "rgba(255,255,255,0.10)"
+padding_left = 10
+padding_right = 10
+width = 0
+height = 20
+radius = 9
+
+
 
 [logo]
 
 enabled = true
-
+icon_enabled = true
 icon = ""
-text = "Raix"
-
-icon_color = "#89b4fa"
-text_color = "#cdd6f4"
-
+icon_color = "#ffffff"
+left_click = "raix"
 background = "transparent"
-hover_background = "rgba(255,255,255,0.08)"
-
+hover_background = "rgba(255,255,255,0.10)"
 padding = 9
 radius = 9
+width = 0
+height = 0
 
 
-# ============================================================
-# WORKSPACES
-#
-# WANT ONLY 1-5?
-#
-# numbers = [1, 2, 3, 4, 5]
-#
-# WANT 1-4?
-#
-# numbers = [1, 2, 3, 4]
-#
-# WANT 1-3?
-#
-# numbers = [1, 2, 3]
-# ============================================================
+
+[logo_text]
+
+enabled = false
+text = "Raix"
+color = "#ffffff"
+background = "transparent"
+hover_background = "rgba(255,255,255,0.10)"
+padding = 9
+radius = 9
+width = 0
+height = 0
+
+
 
 [workspaces]
 
 enabled = true
-
-numbers = [
-    1,
-    2,
-    3,
-    4,
-    5
-]
-
+numbers = [1, 2, 3, 4]
 show_empty = true
-
 format = "{id}"
-
 padding = 9
-
 gap = 2
-
+width = 0
+height = 10
 scroll_switch = true
-
 left_click = "hyprctl dispatch workspace {id}"
-
 right_click = ""
-
 middle_click = ""
-
 interval = 500
 
 
-# ============================================================
-# CPU
-# ============================================================
-
-[cpu]
-
-enabled = true
-
-format = "{icon}  {value}%"
-icon = "󰍛"
-
-color = "#cba6f7"
-
-background = "rgba(203,166,247,0.10)"
-hover_background = "rgba(203,166,247,0.18)"
-
-opacity = 1.0
-
-border_color = "transparent"
-border_width = 0
-
-padding = 10
-radius = 9
-
-interval = 1000
-
-tooltip = "CPU Usage"
-
-left_click = "kitty -e btop"
-right_click = ""
-middle_click = ""
-
-scroll_up = ""
-scroll_down = ""
-
-
-# ============================================================
-# RAM
-# ============================================================
-
-[ram]
-
-enabled = true
-
-format = "{icon}  {value}%"
-icon = "󰘚"
-
-color = "#a6e3a1"
-
-background = "rgba(166,227,161,0.10)"
-hover_background = "rgba(166,227,161,0.18)"
-
-opacity = 1.0
-
-border_color = "transparent"
-border_width = 0
-
-padding = 10
-radius = 9
-
-interval = 1000
-
-tooltip = "Memory Usage"
-
-left_click = "kitty -e btop"
-right_click = ""
-middle_click = ""
-
-scroll_up = ""
-scroll_down = ""
-
-
-# ============================================================
-# NETWORK
-# ============================================================
-
-[network]
-
-enabled = true
-
-format = "{icon}  {value}"
-icon = "󰖩"
-
-color = "#89dceb"
-
-background = "rgba(137,220,235,0.10)"
-hover_background = "rgba(137,220,235,0.18)"
-
-opacity = 1.0
-
-border_color = "transparent"
-border_width = 0
-
-padding = 10
-radius = 9
-
-interval = 1000
-
-tooltip = "Network"
-
-left_click = "nm-connection-editor"
-right_click = "kitty -e nmtui"
-middle_click = ""
-
-scroll_up = ""
-scroll_down = ""
-
-
-# ============================================================
-# VOLUME
-# ============================================================
-
-[volume]
-
-enabled = true
-
-format = "{icon}  {value}%"
-icon = "󰕾"
-
-color = "#f5c2e7"
-
-background = "rgba(245,194,231,0.10)"
-hover_background = "rgba(245,194,231,0.18)"
-
-opacity = 1.0
-
-border_color = "transparent"
-border_width = 0
-
-padding = 10
-radius = 9
-
-interval = 500
-
-tooltip = "Audio Volume"
-
-left_click = "pavucontrol"
-
-right_click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-
-middle_click = ""
-
-scroll_up = "wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"
-scroll_down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
-
-
-# ============================================================
-# BATTERY
-# ============================================================
-
-[battery]
-
-enabled = true
-
-format = "{icon}  {value}%"
-icon = "󰁹"
-
-color = "#f9e2af"
-
-background = "rgba(249,226,175,0.10)"
-hover_background = "rgba(249,226,175,0.18)"
-
-opacity = 1.0
-
-border_color = "transparent"
-border_width = 0
-
-padding = 10
-radius = 9
-
-interval = 5000
-
-tooltip = "Battery"
-
-left_click = ""
-right_click = ""
-middle_click = ""
-
-scroll_up = ""
-scroll_down = ""
-
-
-# ============================================================
-# CLOCK
-# ============================================================
 
 [clock]
 
 enabled = true
-
-format = "%a  %d %b  •  %H:%M"
-
-color = "#89b4fa"
-
-background = "rgba(137,180,250,0.10)"
-hover_background = "rgba(137,180,250,0.18)"
-
-opacity = 1.0
-
-border_color = "transparent"
-border_width = 0
-
+format = "󰥔  %a  %d %b  •  %H:%M"
+color = "#ffffff"
+interval = 1000
 font_size = 12
 font_weight = 800
-
-padding = 14
+padding = 12
 radius = 9
-
-interval = 1000
-
+background = "rgba(255,255,255,0.075)"
+hover_background = "rgba(255,255,255,0.12)"
+border_color = "rgba(255,255,255,0.10)"
+border_width = 0
 left_click = ""
 right_click = ""
 middle_click = ""
+
+
+
+[cpu]
+
+enabled = true
+format = "{icon}  {value}%"
+icon = "󰍛"
+height = 20
+color = "#ffffff"
+interval = 1000
+tooltip = "CPU Usage"
+left_click = "kitty -e btop"
+right_click = ""
+middle_click = ""
+scroll_up = ""
+scroll_down = ""
+
+
+[ram]
+
+enabled = true
+format = "{icon}  {value}%"
+icon = "󰘚"
+color = "#ffffff"
+interval = 1000
+tooltip = "Memory Usage"
+left_click = "kitty -e btop"
+right_click = ""
+middle_click = ""
+scroll_up = ""
+scroll_down = ""
+
+
+
+[network]
+
+enabled = true
+format = "{icon}  {value}"
+icon = "󰖩"
+color = "#ffffff"
+interval = 1000
+tooltip = "Network"
+left_click = "nm-connection-editor"
+right_click = "kitty -e nmtui"
+middle_click = ""
+scroll_up = ""
+scroll_down = ""
+
+
+
+[volume]
+
+enabled = true
+format = "{icon}  {value}%"
+icon = "󰕾"
+color = "#ffffff"
+interval = 500
+tooltip = "Audio Volume"
+left_click = "pavucontrol"
+right_click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+middle_click = ""
+scroll_up = "wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"
+scroll_down = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+
+
+
+[battery]
+
+enabled = false
+format = "{icon}  {value}%"
+icon = "󰁹"
+color = "#ffffff"
+interval = 5000
+tooltip = "Battery"
+left_click = ""
+right_click = ""
+middle_click = ""
+scroll_up = ""
+scroll_down = ""
